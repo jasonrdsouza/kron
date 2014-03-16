@@ -1,0 +1,53 @@
+########################
+####  KRONTAB FILE  ####
+########################
+
+# List of scheduled Jobs to be run by kron
+jobs:
+  - name: unique_named_job
+    command: echo "this is a test"
+    queue: test_queue
+    time: # similar to cron
+      month: [2,3,4] # if left off, implies all months
+      monthday: [1]
+      weekday: [Friday] # only accepts strings (case insensitive)
+      hour: [0] # 0 to 23
+      minute: [0] # 0 to 59
+    script:
+      command: touch test.txt
+      retry: 5 # in minutes
+    timeout: 100 # in minutes
+    wait: -1 # negative means no timeout
+    multiple: true
+  - name: second_job
+    command: echo "more frequent test"
+    queue: test_queue
+    time: # fields that are left off are equivalent to * in cron
+      minute: [5,10,15,20,25,30] # 0 to 59
+    script:
+      command: ls
+      retryl: 5 # in minutes
+    timeout: 100 # in minutes
+    wait: -1 # negative means no timeout
+    multiple: false
+
+# Kron Queues
+# queues are a useful way to control resource utilization amongst scheduled jobs
+queues:
+  - name: test_queue
+    slots: 5
+  - name: light_jobs
+    slots: 20
+  - name: heavy_jobs
+    slots: 4
+
+# Kron Settings
+logfile: /tmp/kronlog
+joblogs: /tmp/kronjobs/
+
+# Kron Environment Variables
+environment:
+  - key: ENV_VAR_1
+    value: abc123
+  - key: ENV_VAR_2
+    value: xyz789
