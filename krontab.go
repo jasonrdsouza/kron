@@ -11,12 +11,6 @@ type Krontab struct {
   state yamlKrontab
 }
 
-// YAML queue section parsing struct
-type yamlQueue struct {
-  Name string
-  Slots int
-}
-
 // YAML environment section parsing struct
 type yamlEnvironment struct {
   Key string
@@ -52,9 +46,6 @@ type yamlJob struct {
 
 type yamlKrontab struct {
   Jobs []yamlJob
-  Queues []yamlQueue
-  Logfile string
-  JobLogs string
   Environment []yamlEnvironment
 }
 
@@ -70,8 +61,4 @@ func (k *Krontab) Parse() error {
     return err
   }
   return nil
-}
-
-func (k *Krontab) Logfile() string {
-  return k.state.Logfile
 }

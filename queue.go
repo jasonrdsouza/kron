@@ -12,7 +12,7 @@ type Queue struct {
   active_jobs int
 }
 
-//type QueueMap Queue
+type QueueMap map[string]Queue
 
 func NewQueue(name string, slots int) *Queue {
   q := Queue{
@@ -65,7 +65,7 @@ func (q *Queue) Join() bool {
 }
 
 // What a job is done executing, it must relenquish its spot in the queue by
-// calling Leave
+// calling Leave. It is a runtime error if the queue is empty and Leave is called
 func (q *Queue) Leave() error {
   q.Lock()
   if q.active_jobs < 1 {

@@ -1,0 +1,19 @@
+##############################
+###  KronRC Settings File  ###
+##############################
+
+# Warning: changes to this file only take affect when Kron is restarted
+
+# Kron Queues
+# queues are a useful way to control resource utilization amongst scheduled jobs
+queues:
+  - name: test_queue
+    slots: 5
+  - name: light_jobs
+    slots: 20
+  - name: heavy_jobs
+    slots: 4
+
+# Misc. Settings
+logfile: /tmp/kronlog
+joblogs: /tmp/kronjobs/

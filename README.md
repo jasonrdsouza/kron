@@ -23,15 +23,29 @@ Kron aims to be that scheduler.
 
 Concepts
 --------
+### Krontab
+YAML file of Kron jobs and environment. Reloaded dynamically.
+Explanation of Krontab Schema:
+
+### Kronrc
+YAML file for Kron configuration. Read at startup.
+Explanation of Kronrc fields:
+
+### Dependencies
+- Time
+- Script
 
 
-Usage
------
+Architecture
+------------
+Kron Daemon goroutine reads the Krontab, and generates + keeps track of internal
+state. It knows when to wake up and kick the next job off.
 
+Kron Job goroutines get kicked off by the Kron daemon, at the appropriate time,
+and are responsible for waiting for any script dependencies, and subsequently
+getting into their assigned queue. Once they are in the queue, they kick off the
+actual kronjob, direct its logs, and keep track of its exit code. They also
+are responsible for terminating the kronjob after its timeout, or if the wait
+is longer than its wait threshold.
 
-Todo
-----
-- Implement QueueMap
-  - responsible for managing queue creation/ deletion
-  - remove the concept of a name from the queue struct
-  
+Kron Web goroutine presents an informative view of the kron system.
